@@ -14,6 +14,18 @@ actRouter.get("/:id", validateProjectId, (req, res) => {
         })
 })
 
+actRouter.post("/:id", validateProjectId, (req, res) => {
+    const newAction = req.body;
+    db.insert(newAction)
+        .then( (action) => {
+            res.status(200).json(action)
+        })
+        .catch( () => {
+            res.status(500).json({error: "Could not post this action to database."})
+        })
+})
+    
+
 
 //custom middleware
 function validateProjectId(req, res, next) {

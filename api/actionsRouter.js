@@ -25,7 +25,30 @@ actRouter.post("/:id", validateProjectId, (req, res) => {
         })
 })
     
+actRouter.put("/:id", validateProjectId, (req, res) => {
+    const updated = req.body;
+    const id = req.params.id;
+    console.log("PUT updated and id: ", updated, id)
+    db.update(id, updated)
+        .then( update => {
+            res.status(200).json(update)
+        })
+        .catch( () => {
+            res.status(500).json({error: "Could not update this action."})
+        })
+})
 
+actRouter.delete("/:id", validateProjectId, (req, res) => {
+    const id = req.params.id;
+    db.remove(id)
+        .then( deleted => {
+            res.status(200).json(deleted)
+        })
+        .catch( () => {
+            res.status(500).json({error: "Could not delete this action."})
+        })
+
+})
 
 //custom middleware
 function validateProjectId(req, res, next) {

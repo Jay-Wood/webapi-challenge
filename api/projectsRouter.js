@@ -21,9 +21,8 @@ router.get("/:id", validateProjectId, (req, res) => {
         })
 })
 
-router.post("/:id/projects", (req, res) => {
+router.post("/", (req, res) => {
     const newProject = req.body;
-    console.log(newProject)
     db.insert(newProject)
         .then( (project) => {res.status(200).json(project)})
         .catch( () => {
@@ -31,6 +30,20 @@ router.post("/:id/projects", (req, res) => {
         })
 })
 
+router.put("/:id/", validateProjectId, (req, res) => {
+    const id = req.params.id;
+    const update = req.body;
+    console.log(id, update)
+    db.update(id, update)
+        .then(
+            update => {
+            res.status(200).json(update)
+            }
+        )
+        .catch( () => {
+            res.status(500).json({error: "There was a problem updating this post."})
+        })
+})
 
 
 //custom middleware
@@ -39,7 +52,6 @@ function validateProjectId(req, res, next) {
     db.getById(id)
         .then(project => {
             if(project) {
-                console.log("after then", project.id)
                 req.project = project
                 next()
             } else {

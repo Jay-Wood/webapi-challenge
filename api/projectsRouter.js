@@ -5,7 +5,6 @@ const actionsDb = require("../data/helpers/actionModel.js");
 const router = require("express").Router();
 
 router.get("/", (req, res) => {
-    console.log("Get to projects works")
     db.get()
         .then(projects => res.status(201).json(projects) )
         .catch( () => {
@@ -14,9 +13,7 @@ router.get("/", (req, res) => {
 })
 
 router.get("/:id", validateProjectId, (req, res) => {
-    console.log("Get to projects with ID works")
     const id = req.params.id;
-    console.log("id in get: ", db.get(id))
     db.get(id)
         .then(projects => res.status(201).json(projects) )
         .catch( () => {
@@ -24,7 +21,15 @@ router.get("/:id", validateProjectId, (req, res) => {
         })
 })
 
-// router.post("")
+router.post("/:id/projects", (req, res) => {
+    const newProject = req.body;
+    console.log(newProject)
+    db.insert(newProject)
+        .then( (project) => {res.status(200).json(project)})
+        .catch( () => {
+            res.status(500).json({error: "There was an error posting this project to the database."})
+        })
+})
 
 
 
